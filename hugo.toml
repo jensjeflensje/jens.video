@@ -1,0 +1,19 @@
+baseURL = 'https://jens.video'
+languageCode = 'nl-nl'
+title = 'Jens de Router'
+theme = 'jens'
+staticDir = ['static']
+
+[params]
+  description = 'Een site met alle links en posts voor mijn social media.'
+  images = ['jens.png']
+  title = "Jens de Router"
+
+[params.logo]
+  darkMode = "jens.png" 
+
+[params.meta]
+  favicon = false
+
+[outputs]
+  home = ["HTML"]
