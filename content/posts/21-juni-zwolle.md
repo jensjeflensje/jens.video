@@ -5,9 +5,9 @@ draft: false
 ---
 
 # Hackathon 21 Juni Zwolle
-BREiNN organiseert samen met Stichting Cyberbrein een IoT-hackathon voor jongeren die zich interesseren in hacken en programmeren.
+BREiNN organiseert samen met Stichting Cyberbrein een IoT-hackathon voor jongeren die zich interesseren in hacken en programmeren. Help jij ons om de techniek van de toekomst onhackbaar te maken?
 
-Help jij ons om de techniek van de toekomst onhackbaar te maken?
+Avondeten wordt verzorgd in de vorm van pizza.
 
 📅  21 juni, 17:00 - 21:00
 
