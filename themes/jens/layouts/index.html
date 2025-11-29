@@ -1,40 +1,90 @@
 {{ define "main" }}
-<main aria-role="main">
-    <div class="socials">
-        <a class="social-icon" href="https://discord.gg/Rnh4nsUqGD" target="_blank">
-            <i class="fa-brands fa-discord"></i>
-        </a>
-        <a class="social-icon" href="https://www.youtube.com/@jensderouter" target="_blank">
-            <i class="fa-brands fa-youtube"></i>
-        </a>
-        <a class="social-icon" href="https://github.com/jensjeflensje" target="_blank">
-            <i class="fa-brands fa-github"></i>
-        </a>
-        <a class="social-icon" href="https://www.tiktok.com/@jensderouter" target="_blank">
-            <i class="fa-brands fa-tiktok"></i>
-        </a>
-    </div>
-    <header class="homepage-header">
-        <h1>{{ .Title }}</h1>
-        {{ with .Params.subtitle }}
-        <span class="subtitle">{{ . }}</span>
-        {{ end }}
-    </header>
-    <div class="homepage-content">
-        <!-- Note that the content for index.html, as a sort of list page, will pull from content/_index.md -->
-        <div>
-            {{ .Content }}
+{{ $pages := site.RegularPages.ByDate.Reverse }}
+<main class="home" role="main">
+    <section class="hero">
+        <div class="hero-copy">
+            <p class="hero-eyebrow">Jens de Router</p>
+            {{ with .Content }}
+            <div class="hero-description">
+                {{ . }}
+            </div>
+            {{ end }}
+            <div class="hero-cta">
+                <a class="btn primary" href="https://www.youtube.com/@jensderouter" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-youtube"></i>
+                    Bekijk YouTube
+                </a>
+                <a class="btn secondary" href="#links">
+                    <i class="fa-solid fa-arrow-trend-up"></i>
+                    Bekijk alle links
+                </a>
+            </div>
+            <div class="socials hero-socials">
+                <a class="social-icon" href="https://discord.gg/Rnh4nsUqGD" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+                <a class="social-icon" href="https://www.youtube.com/@jensderouter" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+                <a class="social-icon" href="https://github.com/jensjeflensje" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a class="social-icon" href="https://www.tiktok.com/@jensderouter" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+                </a>
+                <a class="social-icon" href="mailto:social@jensderuiter.dev" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-envelope"></i>
+                </a>
+            </div>
         </div>
-        <div class="homepage-links">
-            {{ range site.RegularPages }}
+        <div class="hero-panel">
+            <p class="panel-label">Uitgelicht</p>
+            <iframe width="435" height="240" src="https://www.youtube.com/embed/zV828TR1m9o?si=sejb0ZCVy7WelE6n" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </section>
+    <section id="links" class="link-section">
+        <div class="section-heading">
+            <h2>Alle links</h2>
+        </div>
+        <div class="link-grid">
+            {{ range $pages }}
                 {{ $pageType := .FirstSection.LinkTitle }}
-                <div class="homepage-link-box {{ cond (eq $pageType "Links") "link-only" "link-page" }}">
-                    <a href="{{ cond (eq $pageType "Links") (.Description) .Permalink }}">
-                        <h3 class="link-box-title">{{ .LinkTitle }}</h3>
-                    </a>
-                </div>
+                {{ $isExternal := eq $pageType "Links" }}
+                {{ $destination := cond $isExternal (.Description) .Permalink }}
+                {{ $hint := "" }}
+                {{ if $isExternal }}
+                    {{ with urls.Parse $destination }}
+                        {{ $host := .Host }}
+                        {{ if strings.HasPrefix $host "www." }}
+                            {{ $host = strings.TrimPrefix $host "www." }}
+                        {{ end }}
+                        {{ $hint = printf "Gaat naar %s" $host }}
+                    {{ end }}
+                {{ else }}
+                    {{ with .Params.subtitle }}
+                        {{ $hint = . }}
+                    {{ else }}
+                        {{ $hint = "Ontdek meer" }}
+                    {{ end }}
+                {{ end }}
+                <article class="link-card {{ if $isExternal }}is-external{{ end }}">
+                    <div class="link-card-body">
+                        <span class="link-card-label">{{ $pageType | default "Link" }}</span>
+                        <h3>{{ .LinkTitle | default .Title }}</h3>
+                        {{ with $hint }}
+                        <p class="link-card-hint">{{ . }}</p>
+                        {{ end }}
+                    </div>
+                    <div class="link-card-action">
+                        <a href="{{ $destination }}" class="pill-link" target="{{ if $isExternal }}_blank{{ else }}_self{{ end }}"{{ if $isExternal }} rel="noopener"{{ end }}>
+                            <span>{{ cond $isExternal "Open link" "Lees verder" }}</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </article>
             {{ end }}
         </div>
-    </div>
+    </section>
 </main>
 {{ end }}
